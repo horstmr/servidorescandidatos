@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servidores Encontrados - Concurso 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent-color: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --border-color: rgba(148, 163, 184, 0.1);
+            --gradient-start: #0f172a;
+            --gradient-end: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                              radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                              radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        p.subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        input {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        thead {
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        th {
+            padding: 1rem;
+            font-weight: 600;
+            color: #818cf8;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            user-select: none;
+            position: sticky;
+            top: 0;
+            background: rgba(15, 23, 42, 0.95); /* Fix sticky header transparency overlap */
+            z-index: 10;
+        }
+        
+        th:hover {
+            color: var(--accent-color);
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background: rgba(56, 189, 248, 0.05); /* Very subtle hover effect */
+        }
+        
+        tr:hover td {
+            color: var(--text-primary);
+        }
+
+        tr {
+            transition: background-color 0.2s ease;
+        }
+
+        /* New CSS for links */
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        a:hover {
+            color: var(--accent-hover);
+            text-decoration: underline;
+        }
+
+        .external-link-icon {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+            opacity: 0.7;
+        }
+
+        .stats {
+            margin-top: 1rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            text-align: right;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.4);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(148, 163, 184, 0.5);
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Servidores Encontrados</h1>
+        <p class="subtitle">Análise cruzada entre <a href="https://2025pciperito.fepese.org.br/" target="_blank">FEPESE (Concurso 2025)</a> e <a href="https://www.transparencia.sc.gov.br/remuneracao-servidores" target="_blank">Portal da Transparência SC</a></p>
+    </header>
+
+    <div class="filters">
+        <div class="filter-group">
+            <label for="searchNome">Nome</label>
+            <input type="text" id="searchNome" placeholder="Filtrar por nome...">
+        </div>
+        <div class="filter-group">
+            <label for="searchCargoAtual">Cargo Atual</label>
+            <input type="text" id="searchCargoAtual" placeholder="Filtrar por cargo atual...">
+        </div>
+        <div class="filter-group">
+            <label for="searchLotacao">Lotação</label>
+            <input type="text" id="searchLotacao" placeholder="Filtrar por lotação...">
+        </div>
+        <div class="filter-group">
+            <label for="searchCargoConcurso">Cargo Concurso</label>
+            <input type="text" id="searchCargoConcurso" placeholder="Filtrar por cargo concurso...">
+        </div>
+        <div class="filter-group">
+            <label for="searchArquivo">Arquivo Origem</label>
+            <input type="text" id="searchArquivo" placeholder="Filtrar por arquivo...">
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table id="dataTable">
+            <thead>
+                <tr>
+                    <th onclick="sortTable(0)">Nome ↕</th>
+                    <th onclick="sortTable(1)">Cargo Atual ↕</th>
+                    <th onclick="sortTable(2)">Lotação ↕</th>
+                    <th onclick="sortTable(3)">Cargo Concurso ↕</th>
+                    <th onclick="sortTable(4)">Arquivo PDF ↕</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- Rows will be injected here -->
+            </tbody>
+        </table>
+        <div id="noResults" class="no-results">
+            Nenhum registro encontrado para os filtros selecionados.
+        </div>
+    </div>
+    
+    <div class="stats" id="stats">
+        Mostrando <span id="shownCount">0</span> de <span id="totalCount">0</span> registros
+    </div>
+</div>
+
+<script>
+    const data = [{"Nome": "ALECIO HENRIQUE DIONIZIO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM CAMPOS NOVOS", "Cargo Concurso": "Perito Oficial Criminal - Informática", "Arquivo PDF Origem": "ed_1_lst_homologacao_10_30.pdf"}, {"Nome": "ALESSANDRA FERNANDES ELIAS VIEGAS", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM ARARANGUA", "Cargo Concurso": "Perito Oficial Criminal - Informática", "Arquivo PDF Origem": "ed_1_lst_homologacao_10_30.pdf"}, {"Nome": "ALINE CRISTINA HAMMES", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM PALHOCA", "Cargo Concurso": "Perito Oficial Criminal - Informática", "Arquivo PDF Origem": "ed_1_lst_homologacao_10_30.pdf"}, {"Nome": "ANA CARLA DO NASCIMENTO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM CURITIBANOS", "Cargo Concurso": "Perito Oficial Criminal - Informática", "Arquivo PDF Origem": "ed_1_lst_homologacao_10_30.pdf"}, {"Nome": "ARNOUD FELIPE DE MELO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM JOINVILLE", "Cargo Concurso": "Perito Oficial Criminal - Informática", "Arquivo PDF Origem": "ed_1_lst_homologacao_10_30.pdf"}, {"Nome": "BRUNO SOARES FERREIRA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM SAO JOSE", "Cargo Concurso": "Perito Oficial Criminal - Informática", "Arquivo PDF Origem": "ed_1_lst_homologacao_10_30.pdf"}, {"Nome": "CAROLINA ROCHA BARBOSA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM BALNEARIO CAMBORIU", "Cargo Concurso": "Perito Oficial Criminal - Informática", "Arquivo PDF Origem": "ed_1_lst_homologacao_10_30.pdf"}, {"Nome": "CRHISTIAN MAZZOTTI BEFFART", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM CACADOR", "Cargo Concurso": "Perito Oficial Criminal - Informática", "Arquivo PDF Origem": "ed_1_lst_homologacao_10_30.pdf"}, {"Nome": "DEBORAH LURDES TRICHES ACORDI", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM ARARANGUA", "Cargo Concurso": "Perito Oficial Criminal - Informática", "Arquivo PDF Origem": "ed_1_lst_homologacao_10_30.pdf"}, {"Nome": "DOUGLAS MARIANO DA SILVA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Informática", "Arquivo PDF Origem": "ed_1_lst_homologacao_10_30.pdf"}, {"Nome": "EDUARDO DEORACKI", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM CURITIBANOS", "Cargo Concurso": "Perito Oficial Criminal - Informática", "Arquivo PDF Origem": "ed_1_lst_homologacao_10_30.pdf"}, {"Nome": "EDUARDO DOMANSKI DOS SANTOS", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM BLUMENAU", "Cargo Concurso": "Perito Oficial Criminal - Informática", "Arquivo PDF Origem": "ed_1_lst_homologacao_10_30.pdf"}, {"Nome": "ELIEZER DE ALBUQUERQUE RODRIGUES", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM CACADOR", "Cargo Concurso": "Perito Oficial Criminal - Informática", "Arquivo PDF Origem": "ed_1_lst_homologacao_10_30.pdf"}, {"Nome": "ERICK LAGO FREITAS", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Informática", "Arquivo PDF Origem": "ed_1_lst_homologacao_10_30.pdf"}, {"Nome": "FILIPE VENTURA WOLL", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM JOINVILLE", "Cargo Concurso": "Perito Oficial Criminal - Informática", "Arquivo PDF Origem": "ed_1_lst_homologacao_10_30.pdf"}, {"Nome": "GLADSTON FREITAS LEITE", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM LAGES", "Cargo Concurso": "Perito Oficial Criminal - Informática", "Arquivo PDF Origem": "ed_1_lst_homologacao_10_30.pdf"}, {"Nome": "JOAO ANTONIO NOGUEIRA RAMOS NETO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Informática", "Arquivo PDF Origem": "ed_1_lst_homologacao_10_30.pdf"}, {"Nome": "KAUANE FALCADE CAVALHEIRO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA DE FRONTEIRA EM CHAPECO", "Cargo Concurso": "Perito Oficial Criminal - Informática", "Arquivo PDF Origem": "ed_1_lst_homologacao_10_30.pdf"}, {"Nome": "MARCELO GOMES", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Informática", "Arquivo PDF Origem": "ed_1_lst_homologacao_10_30.pdf"}, {"Nome": "MATEUS GODOI FREITAS", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM BALNEARIO CAMBORIU", "Cargo Concurso": "Perito Oficial Criminal - Informática", "Arquivo PDF Origem": "ed_1_lst_homologacao_10_30.pdf"}, {"Nome": "MAURICIO DARABAS RONZANI", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM CRICIUMA", "Cargo Concurso": "Perito Oficial Criminal - Informática", "Arquivo PDF Origem": "ed_1_lst_homologacao_10_30.pdf"}, {"Nome": "PATRICIA NEINAS", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Informática", "Arquivo PDF Origem": "ed_1_lst_homologacao_10_30.pdf"}, {"Nome": "PAULO HENRIQUE DOS SANTOS", "Cargo Atual": "PERITO OFICIAL CRIMINAL", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Informática", "Arquivo PDF Origem": "ed_1_lst_homologacao_10_30.pdf"}, {"Nome": "VICTOR LOUSAN DO NASCIMENTO POUBEL", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "CORREGEDORIA-GERAL", "Cargo Concurso": "Perito Oficial Criminal - Informática", "Arquivo PDF Origem": "ed_1_lst_homologacao_10_30.pdf"}, {"Nome": "VINICIUS BASTOS", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM SAO BENTO DO SUL", "Cargo Concurso": "Perito Oficial Criminal - Informática", "Arquivo PDF Origem": "ed_1_lst_homologacao_10_30.pdf"}, {"Nome": "VICTOR HUGO DE CAMPOS", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM CRICIUMA", "Cargo Concurso": "Perito Oficial Criminal - Medicina Legal", "Arquivo PDF Origem": "ed_1_lst_homologacao_1_27.pdf"}, {"Nome": "EDUARDA ROSADO DE ALMEIDA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM JOINVILLE", "Cargo Concurso": "Perito Oficial Criminal - Áudio e Imagem", "Arquivo PDF Origem": "ed_1_lst_homologacao_4_30.pdf"}, {"Nome": "FELIPP BITTENCOURT FRASSETTO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Áudio e Imagem", "Arquivo PDF Origem": "ed_1_lst_homologacao_4_30.pdf"}, {"Nome": "GUSTAVO DA SILVA POLETTO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "GERENCIA DE PLANEJAMENTO E AVALIACAO (DEC 173/2023)", "Cargo Concurso": "Perito Oficial Criminal - Áudio e Imagem", "Arquivo PDF Origem": "ed_1_lst_homologacao_4_30.pdf"}, {"Nome": "MARIA CAMILA SELBACH", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM PORTO UNIAO", "Cargo Concurso": "Perito Oficial Criminal - Áudio e Imagem", "Arquivo PDF Origem": "ed_1_lst_homologacao_4_30.pdf"}, {"Nome": "MARINA TANABE DO LIVRAMENTO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM SAO JOAQUIM", "Cargo Concurso": "Perito Oficial Criminal - Áudio e Imagem", "Arquivo PDF Origem": "ed_1_lst_homologacao_4_30.pdf"}, {"Nome": "OSNI DI TARSIS RODRIGUES PORCINO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM CACADOR", "Cargo Concurso": "Perito Oficial Criminal - Áudio e Imagem", "Arquivo PDF Origem": "ed_1_lst_homologacao_4_30.pdf"}, {"Nome": "PIETRO OLIVEIRA MORAIS GUESSER", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM JOINVILLE", "Cargo Concurso": "Perito Oficial Criminal - Áudio e Imagem", "Arquivo PDF Origem": "ed_1_lst_homologacao_4_30.pdf"}, {"Nome": "BETHANIA LUIZA HORST", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM PALHOCA", "Cargo Concurso": "Perito Oficial Criminal - Química", "Arquivo PDF Origem": "ed_1_lst_homologacao_14_30.pdf"}, {"Nome": "CAMILA DE OLIVEIRA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Química", "Arquivo PDF Origem": "ed_1_lst_homologacao_14_30.pdf"}, {"Nome": "CARLOS WESTRUP PIRES DA SILVA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM CRICIUMA", "Cargo Concurso": "Perito Oficial Criminal - Química", "Arquivo PDF Origem": "ed_1_lst_homologacao_14_30.pdf"}, {"Nome": "DALISE DE OLIVEIRA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM PORTO UNIAO", "Cargo Concurso": "Perito Oficial Criminal - Química", "Arquivo PDF Origem": "ed_1_lst_homologacao_14_30.pdf"}, {"Nome": "DEBORA BIASI", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM JOINVILLE", "Cargo Concurso": "Perito Oficial Criminal - Química", "Arquivo PDF Origem": "ed_1_lst_homologacao_14_30.pdf"}, {"Nome": "ELLEN MARCELINA SPILLERE SCHEEREN", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM CRICIUMA", "Cargo Concurso": "Perito Oficial Criminal - Química", "Arquivo PDF Origem": "ed_1_lst_homologacao_14_30.pdf"}, {"Nome": "FERNANDA CRISTINA JUNCK CESTARI", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM BLUMENAU", "Cargo Concurso": "Perito Oficial Criminal - Química", "Arquivo PDF Origem": "ed_1_lst_homologacao_14_30.pdf"}, {"Nome": "FERNANDA PADILHA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM CURITIBANOS", "Cargo Concurso": "Perito Oficial Criminal - Química", "Arquivo PDF Origem": "ed_1_lst_homologacao_14_30.pdf"}, {"Nome": "GABRIEL MODERNELL ZANOTTO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Química", "Arquivo PDF Origem": "ed_1_lst_homologacao_14_30.pdf"}, {"Nome": "GISELA ANGELICA DIAS FAVRETTO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Química", "Arquivo PDF Origem": "ed_1_lst_homologacao_14_30.pdf"}, {"Nome": "GLEIDSON KAMILO DIAS DE MORAES", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM VIDEIRA", "Cargo Concurso": "Perito Oficial Criminal - Química", "Arquivo PDF Origem": "ed_1_lst_homologacao_14_30.pdf"}, {"Nome": "JADER LEANDRO APARICIO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM JOACABA", "Cargo Concurso": "Perito Oficial Criminal - Química", "Arquivo PDF Origem": "ed_1_lst_homologacao_14_30.pdf"}, {"Nome": "JESSICA GIOVANNA BERNARDINI SANTIN", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "DIRETORIA DE IDENTIFICACAO CIVIL E CRIMINAL", "Cargo Concurso": "Perito Oficial Criminal - Química", "Arquivo PDF Origem": "ed_1_lst_homologacao_14_30.pdf"}, {"Nome": "JULIANA MONTAGNA HARTWIG", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM BALNEARIO CAMBORIU", "Cargo Concurso": "Perito Oficial Criminal - Química", "Arquivo PDF Origem": "ed_1_lst_homologacao_14_30.pdf"}, {"Nome": "KETTULIN ZOMER REZIN", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM CRICIUMA", "Cargo Concurso": "Perito Oficial Criminal - Química", "Arquivo PDF Origem": "ed_1_lst_homologacao_14_30.pdf"}, {"Nome": "LUIZ PHILIPI CALEGARI", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "DIRETORIA DE CRIMINALISTICA", "Cargo Concurso": "Perito Oficial Criminal - Química", "Arquivo PDF Origem": "ed_1_lst_homologacao_14_30.pdf"}, {"Nome": "MAIARA VENANCIO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA DE FRONTEIRA EM CONCORDIA", "Cargo Concurso": "Perito Oficial Criminal - Química", "Arquivo PDF Origem": "ed_1_lst_homologacao_14_30.pdf"}, {"Nome": "MARCELA FERRAZ DICKOW", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM CRICIUMA", "Cargo Concurso": "Perito Oficial Criminal - Química", "Arquivo PDF Origem": "ed_1_lst_homologacao_14_30.pdf"}, {"Nome": "MONICA CRISTINE THIBES", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM BALNEARIO CAMBORIU", "Cargo Concurso": "Perito Oficial Criminal - Química", "Arquivo PDF Origem": "ed_1_lst_homologacao_14_30.pdf"}, {"Nome": "MYLENA FERNANDES", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM LAGES", "Cargo Concurso": "Perito Oficial Criminal - Química", "Arquivo PDF Origem": "ed_1_lst_homologacao_14_30.pdf"}, {"Nome": "PRISCILLA DE LIMA NUNES", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Química", "Arquivo PDF Origem": "ed_1_lst_homologacao_14_30.pdf"}, {"Nome": "RODRIGO BONELI LIDORIO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM TUBARAO", "Cargo Concurso": "Perito Oficial Criminal - Química", "Arquivo PDF Origem": "ed_1_lst_homologacao_14_30.pdf"}, {"Nome": "SIRLENE MARTINS MAZZUCO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM LAGES", "Cargo Concurso": "Perito Oficial Criminal - Química", "Arquivo PDF Origem": "ed_1_lst_homologacao_14_30.pdf"}, {"Nome": "SURYA DE JESUS CANTARINO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Química", "Arquivo PDF Origem": "ed_1_lst_homologacao_14_30.pdf"}, {"Nome": "JAIME REGO DE MENEZES NETO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM JOINVILLE", "Cargo Concurso": "Perito Oficial Criminal - Geologia/Minas", "Arquivo PDF Origem": "ed_1_lst_homologacao_9_30.pdf"}, {"Nome": "ANDERSON GREGORIO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM CACADOR", "Cargo Concurso": "Perito Oficial Criminal - Medicina Veterinária", "Arquivo PDF Origem": "ed_1_lst_homologacao_12_30.pdf"}, {"Nome": "BEATRIZ PAVEI BEZ BATTI", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM CRICIUMA", "Cargo Concurso": "Perito Oficial Criminal - Medicina Veterinária", "Arquivo PDF Origem": "ed_1_lst_homologacao_12_30.pdf"}, {"Nome": "BEATRIZ SUZANA MACHADO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Medicina Veterinária", "Arquivo PDF Origem": "ed_1_lst_homologacao_12_30.pdf"}, {"Nome": "MARIO CESAR CORREA JUNIOR", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM SAO BENTO DO SUL", "Cargo Concurso": "Perito Oficial Criminal - Medicina Veterinária", "Arquivo PDF Origem": "ed_1_lst_homologacao_12_30.pdf"}, {"Nome": "VANESSA FARINHA NUNES DA SILVA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM SAO JOSE", "Cargo Concurso": "Perito Oficial Criminal - Medicina Veterinária", "Arquivo PDF Origem": "ed_1_lst_homologacao_12_30.pdf"}, {"Nome": "ROBERTO FIGUEREDO", "Cargo Atual": "PERITO OFICIAL CRIMINAL", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM ARARANGUA", "Cargo Concurso": "Perito Oficial Criminal - Medicina Legal", "Arquivo PDF Origem": "ed_1_lst_homologacao_1_10.pdf"}, {"Nome": "ADALBERTO KAROL RODRIGUES", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM PORTO UNIAO", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "ALLAN MARTINS ALVES", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM BLUMENAU", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "ANA CAROLINA BOGO DA ROSA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "ANTHONY DE OLIVEIRA SILVEIRA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM BALNEARIO CAMBORIU", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "ARTHUR KLEIN GOELZER", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM CACADOR", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "CAMILA MACHADO CIESCA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA DE FRONTEIRA EM SAO LOURENCO DO OESTE", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "CARLA FABIANA BONFANTI", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM JOINVILLE", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "FERNANDA GALLOTTI GOTELIP", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM SAO BENTO DO SUL", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "FRANCIELE DE MATIAS", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM CACADOR", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "FRANCIELLE BATISTA DUARTE FERREIRA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "GERENCIA DE GESTAO DE PESSOAS", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "GENIANE SCHNEIDER", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA DE FRONTEIRA EM SAO MIGUEL DO OESTE", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "GEOVANA VENDRUSCOLO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM BRUSQUE", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "HADJA MARIA RADTKE NUNES", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "HIUKARY MARIA ALVES BORGES", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM LAGES", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "JESSICA SOARES", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM RIO DO SUL", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "JULIANA MERLIN VIANA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM BALNEARIO CAMBORIU", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "JULIANE GONCALVES", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "KAREN ANDRINEIA DE OLIVEIRA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM SAO JOSE", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "LAURA ADRIANO CORREA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM LAGUNA", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "MARCELA COSTA BRITO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM CACADOR", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "MARIA AUGUSTA DOS SANTOS DOIN VIEIRA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM PALHOCA", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "NATHALIA CRISTINA GONZALEZ RIBEIRO", "Cargo Atual": "PAPILOSCOPISTA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM JOINVILLE", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "PRISCILA SEBASTIANA GRIGORE DE AMORIM", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM JARAGUA DO SUL", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "RAFAEL ANTONIO PARIZZI", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM JOINVILLE", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "RENATO CARVALHO FERREIRA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM BALNEARIO CAMBORIU", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "RICARDO QUEIROZ MELLO DA SILVEIRA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM TUBARAO", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "RITA DE CASSIA CARDOSO DA LUZ", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM CRICIUMA", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "ROMELL ALVES RIBEIRO DIAS", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM LAGES", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "SERENA RAMOS", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "DIRETORIA DE TECNOLOGIA E INOVACAO", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "SHIRLAINE MARTINS MACHADO", "Cargo Atual": "PAPILOSCOPISTA", "Lotacao (Unidade Exercicio)": "DIRETORIA DE IDENTIFICACAO CIVIL E CRIMINAL", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "SUELEN PAULA CIZINANDE", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "DIRETORIA DE CRIMINALISTICA", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "TAIS BERNAL BALCONI", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "TOZELLI JOAO PASCHOAL FILHO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "VAGNE JOSE DA SILVA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM CANOINHAS", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "WILLIAN CARLOS NORI DOS SANTOS", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM ITAJAI", "Cargo Concurso": "Perito Oficial Criminal - Ambiental", "Arquivo PDF Origem": "ed_1_lst_homologacao_3_30.pdf"}, {"Nome": "DANIEL JOSE RESENDE SAGGIN", "Cargo Atual": "PERITO OFICIAL CRIMINAL", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM MAFRA", "Cargo Concurso": "Perito Oficial Criminal - Medicina Legal", "Arquivo PDF Origem": "ed_1_lst_homologacao_1_18.pdf"}, {"Nome": "PAULO HENRIQUE DOS SANTOS", "Cargo Atual": "PERITO OFICIAL CRIMINAL", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Odontologia", "Arquivo PDF Origem": "ed_1_lst_homologacao_13_30.pdf"}, {"Nome": "ANDRE LUIZ DOS SANTOS", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM PORTO UNIAO", "Cargo Concurso": "Perito Oficial Criminal - Mecânica/", "Arquivo PDF Origem": "ed_1_lst_homologacao_11_30.pdf"}, {"Nome": "FELIPE RAMON PROVENZI COLTRO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA DE FRONTEIRA EM CHAPECO", "Cargo Concurso": "Perito Oficial Criminal - Mecânica/", "Arquivo PDF Origem": "ed_1_lst_homologacao_11_30.pdf"}, {"Nome": "GABRIEL FONTANELLE PEREIRA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM CANOINHAS", "Cargo Concurso": "Perito Oficial Criminal - Mecânica/", "Arquivo PDF Origem": "ed_1_lst_homologacao_11_30.pdf"}, {"Nome": "GIULLI MADEIRA DE QUADROS", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Mecânica/", "Arquivo PDF Origem": "ed_1_lst_homologacao_11_30.pdf"}, {"Nome": "GUILHERME FRANZOI", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA DE FRONTEIRA EM CONCORDIA", "Cargo Concurso": "Perito Oficial Criminal - Mecânica/", "Arquivo PDF Origem": "ed_1_lst_homologacao_11_30.pdf"}, {"Nome": "JACKSON ILHA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM BLUMENAU", "Cargo Concurso": "Perito Oficial Criminal - Mecânica/", "Arquivo PDF Origem": "ed_1_lst_homologacao_11_30.pdf"}, {"Nome": "LEONARDO DE SOUZA PIRES", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "GERENCIA DE APOIO OPERACIONAL", "Cargo Concurso": "Perito Oficial Criminal - Mecânica/", "Arquivo PDF Origem": "ed_1_lst_homologacao_11_30.pdf"}, {"Nome": "MICAELA DE FREITAS ANDRADE ARAUJO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM SAO BENTO DO SUL", "Cargo Concurso": "Perito Oficial Criminal - Mecânica/", "Arquivo PDF Origem": "ed_1_lst_homologacao_11_30.pdf"}, {"Nome": "NAGILA LUCIETTI SCHMIDT MELLO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM BLUMENAU", "Cargo Concurso": "Perito Oficial Criminal - Mecânica/", "Arquivo PDF Origem": "ed_1_lst_homologacao_11_30.pdf"}, {"Nome": "PATRICK NIKSON RUBBO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM CRICIUMA", "Cargo Concurso": "Perito Oficial Criminal - Mecânica/", "Arquivo PDF Origem": "ed_1_lst_homologacao_11_30.pdf"}, {"Nome": "ALEXANDRE VON FRUHAUF", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "GERENCIA DE OBRAS E SERVICOS DE ENGENHARIA", "Cargo Concurso": "Perito Oficial Criminal - Engenharia Civil", "Arquivo PDF Origem": "ed_1_lst_homologacao_8_30.pdf"}, {"Nome": "BRUNO VITALI ISOPPO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM CRICIUMA", "Cargo Concurso": "Perito Oficial Criminal - Engenharia Civil", "Arquivo PDF Origem": "ed_1_lst_homologacao_8_30.pdf"}, {"Nome": "CAIO BONETTI MENDES", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Engenharia Civil", "Arquivo PDF Origem": "ed_1_lst_homologacao_8_30.pdf"}, {"Nome": "ELTON JORGE DA SILVA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM BLUMENAU", "Cargo Concurso": "Perito Oficial Criminal - Engenharia Civil", "Arquivo PDF Origem": "ed_1_lst_homologacao_8_30.pdf"}, {"Nome": "ESTELA BORTOLANZA DALAZEN", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA DE FRONTEIRA EM CHAPECO", "Cargo Concurso": "Perito Oficial Criminal - Engenharia Civil", "Arquivo PDF Origem": "ed_1_lst_homologacao_8_30.pdf"}, {"Nome": "GUILHERME HENRIQUE ROSSO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM CRICIUMA", "Cargo Concurso": "Perito Oficial Criminal - Engenharia Civil", "Arquivo PDF Origem": "ed_1_lst_homologacao_8_30.pdf"}, {"Nome": "JULIANA EVELYN GOMES MACHADO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM LAGES", "Cargo Concurso": "Perito Oficial Criminal - Engenharia Civil", "Arquivo PDF Origem": "ed_1_lst_homologacao_8_30.pdf"}, {"Nome": "MAGALI BARDINI SIMON", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM ARARANGUA", "Cargo Concurso": "Perito Oficial Criminal - Engenharia Civil", "Arquivo PDF Origem": "ed_1_lst_homologacao_8_30.pdf"}, {"Nome": "MARLON VENICIUS WASEM", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA DE FRONTEIRA EM XANXERE", "Cargo Concurso": "Perito Oficial Criminal - Engenharia Civil", "Arquivo PDF Origem": "ed_1_lst_homologacao_8_30.pdf"}, {"Nome": "MATHEUS MARION ROVANI", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "GERENCIA DE APOIO OPERACIONAL", "Cargo Concurso": "Perito Oficial Criminal - Engenharia Civil", "Arquivo PDF Origem": "ed_1_lst_homologacao_8_30.pdf"}, {"Nome": "MURILO DE SOUZA", "Cargo Atual": "PERITO OFICIAL CRIMINAL", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Engenharia Civil", "Arquivo PDF Origem": "ed_1_lst_homologacao_8_30.pdf"}, {"Nome": "RENAN MATSUDA BENEDITO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Engenharia Civil", "Arquivo PDF Origem": "ed_1_lst_homologacao_8_30.pdf"}, {"Nome": "VINICIUS HENRIQUE DAMKE", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM BALNEARIO CAMBORIU", "Cargo Concurso": "Perito Oficial Criminal - Engenharia Civil", "Arquivo PDF Origem": "ed_1_lst_homologacao_8_30.pdf"}, {"Nome": "MARCELO DA SILVA", "Cargo Atual": "PERITO OFICIAL CRIMINAL", "Lotacao (Unidade Exercicio)": "GERENCIA DE OBRAS E SERVICOS DE ENGENHARIA", "Cargo Concurso": "Perito Oficial Criminal - Medicina Legal", "Arquivo PDF Origem": "ed_1_lst_homologacao_1_1.pdf"}, {"Nome": "GEOVAN FABIO DE OLIVEIRA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA DE FRONTEIRA EM CHAPECO", "Cargo Concurso": "Perito Oficial Criminal - Medicina Legal", "Arquivo PDF Origem": "ed_1_lst_homologacao_1_29.pdf"}, {"Nome": "ALESSANDRA BORTOLUZZI COSTA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Ciências Biológicas", "Arquivo PDF Origem": "ed_1_lst_homologacao_6_30.pdf"}, {"Nome": "ALEXANDRE KRULI DE MORAIS", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM ITAJAI", "Cargo Concurso": "Perito Oficial Criminal - Ciências Biológicas", "Arquivo PDF Origem": "ed_1_lst_homologacao_6_30.pdf"}, {"Nome": "ANA KELLY PITLOVANCIV", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "DIRETORIA DE ADMINISTRACAO E FINANCAS", "Cargo Concurso": "Perito Oficial Criminal - Ciências Biológicas", "Arquivo PDF Origem": "ed_1_lst_homologacao_6_30.pdf"}, {"Nome": "ANA RUBIA RAMOS FRITSCHE ZANELLA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "GABINETE DO PERITO-GERAL", "Cargo Concurso": "Perito Oficial Criminal - Ciências Biológicas", "Arquivo PDF Origem": "ed_1_lst_homologacao_6_30.pdf"}, {"Nome": "ANGELA TOMASI ANTUNES", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM LAGES", "Cargo Concurso": "Perito Oficial Criminal - Ciências Biológicas", "Arquivo PDF Origem": "ed_1_lst_homologacao_6_30.pdf"}, {"Nome": "BRUNO CEZAR SENA SANTOS", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM JOINVILLE", "Cargo Concurso": "Perito Oficial Criminal - Ciências Biológicas", "Arquivo PDF Origem": "ed_1_lst_homologacao_6_30.pdf"}, {"Nome": "CAMILLA DA ROSA DUARTE", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM JOINVILLE", "Cargo Concurso": "Perito Oficial Criminal - Ciências Biológicas", "Arquivo PDF Origem": "ed_1_lst_homologacao_6_30.pdf"}, {"Nome": "CLEDINA DE OLIVEIRA STIEGEMAIER DOS SANTOS", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA DE FRONTEIRA EM CHAPECO", "Cargo Concurso": "Perito Oficial Criminal - Ciências Biológicas", "Arquivo PDF Origem": "ed_1_lst_homologacao_6_30.pdf"}, {"Nome": "FERNANDO ZILLI SILVESTRI", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM ARARANGUA", "Cargo Concurso": "Perito Oficial Criminal - Ciências Biológicas", "Arquivo PDF Origem": "ed_1_lst_homologacao_6_30.pdf"}, {"Nome": "GABRIELA PROENCO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM PALHOCA", "Cargo Concurso": "Perito Oficial Criminal - Ciências Biológicas", "Arquivo PDF Origem": "ed_1_lst_homologacao_6_30.pdf"}, {"Nome": "GIVAGO NODARY DA SILVA CORREA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM LAGES", "Cargo Concurso": "Perito Oficial Criminal - Ciências Biológicas", "Arquivo PDF Origem": "ed_1_lst_homologacao_6_30.pdf"}, {"Nome": "GLAUCIA SAVI MONDO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA DE FRONTEIRA EM SAO LOURENCO DO OESTE", "Cargo Concurso": "Perito Oficial Criminal - Ciências Biológicas", "Arquivo PDF Origem": "ed_1_lst_homologacao_6_30.pdf"}, {"Nome": "IRAPUAN FRANCISCO BUSSMANN FILHO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM BALNEARIO CAMBORIU", "Cargo Concurso": "Perito Oficial Criminal - Ciências Biológicas", "Arquivo PDF Origem": "ed_1_lst_homologacao_6_30.pdf"}, {"Nome": "JANAINA CARRION WICKERT", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM BALNEARIO CAMBORIU", "Cargo Concurso": "Perito Oficial Criminal - Ciências Biológicas", "Arquivo PDF Origem": "ed_1_lst_homologacao_6_30.pdf"}, {"Nome": "JESSICA CAMPESTRINI", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM JARAGUA DO SUL", "Cargo Concurso": "Perito Oficial Criminal - Ciências Biológicas", "Arquivo PDF Origem": "ed_1_lst_homologacao_6_30.pdf"}, {"Nome": "JULIANA CRISTINA PEREIRA HEINZ", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM BRUSQUE", "Cargo Concurso": "Perito Oficial Criminal - Ciências Biológicas", "Arquivo PDF Origem": "ed_1_lst_homologacao_6_30.pdf"}, {"Nome": "LENA RIBEIRO LEITAO PINTER", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM TUBARAO", "Cargo Concurso": "Perito Oficial Criminal - Ciências Biológicas", "Arquivo PDF Origem": "ed_1_lst_homologacao_6_30.pdf"}, {"Nome": "LUCAS JOAO LEITE FARIAS", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Ciências Biológicas", "Arquivo PDF Origem": "ed_1_lst_homologacao_6_30.pdf"}, {"Nome": "LUISA VIANNA MESQUITA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM JOINVILLE", "Cargo Concurso": "Perito Oficial Criminal - Ciências Biológicas", "Arquivo PDF Origem": "ed_1_lst_homologacao_6_30.pdf"}, {"Nome": "MARCELO LUIZ SCHIAVINI", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA DE FRONTEIRA EM CONCORDIA", "Cargo Concurso": "Perito Oficial Criminal - Ciências Biológicas", "Arquivo PDF Origem": "ed_1_lst_homologacao_6_30.pdf"}, {"Nome": "MONICA BECKER COELHO WORDELL", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM BALNEARIO CAMBORIU", "Cargo Concurso": "Perito Oficial Criminal - Ciências Biológicas", "Arquivo PDF Origem": "ed_1_lst_homologacao_6_30.pdf"}, {"Nome": "MURILO DE SOUZA", "Cargo Atual": "PERITO OFICIAL CRIMINAL", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Ciências Biológicas", "Arquivo PDF Origem": "ed_1_lst_homologacao_6_30.pdf"}, {"Nome": "NATALIA VIEIRA SEGATTO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM CRICIUMA", "Cargo Concurso": "Perito Oficial Criminal - Ciências Biológicas", "Arquivo PDF Origem": "ed_1_lst_homologacao_6_30.pdf"}, {"Nome": "NICOLAS GABRIEL MARTINS SILVA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM SAO BENTO DO SUL", "Cargo Concurso": "Perito Oficial Criminal - Ciências Biológicas", "Arquivo PDF Origem": "ed_1_lst_homologacao_6_30.pdf"}, {"Nome": "NILMAR PIROCA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA DE FRONTEIRA EM SAO MIGUEL DO OESTE", "Cargo Concurso": "Perito Oficial Criminal - Ciências Biológicas", "Arquivo PDF Origem": "ed_1_lst_homologacao_6_30.pdf"}, {"Nome": "SABRINA PEREIRA SANTOS", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Ciências Biológicas", "Arquivo PDF Origem": "ed_1_lst_homologacao_6_30.pdf"}, {"Nome": "VANESSA ZANELLA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA DE FRONTEIRA EM XANXERE", "Cargo Concurso": "Perito Oficial Criminal - Ciências Biológicas", "Arquivo PDF Origem": "ed_1_lst_homologacao_6_30.pdf"}, {"Nome": "ALINE BRAZ", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "ALINE CECHETTO BECK", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "AMANDA ANTUNES VIEIRA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "ACADEMIA DE PERICIA", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "ANDRE RIZZO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM BALNEARIO CAMBORIU", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "ARTHUR DONADUZZI DOS SANTOS", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM CACADOR", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "BARBARA PADILHA DOS SANTOS", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM VIDEIRA", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "CARLA BEATRIZ JUNG SCHLOSSER", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM BALNEARIO CAMBORIU", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "CARLOS RICARDO DE MELO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM JOINVILLE", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "CHRISTIAN NUNES DE MORAES", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM SAO JOSE", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "CLAUDIO LUIS BITTELBRUN", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM BLUMENAU", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "DANIEL AKIRA KOH", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM TUBARAO", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "DANIEL BORGES", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM ARARANGUA", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "DANIELLE ZAPANI", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM CACADOR", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "DIONATHAN DOS SANTOS", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM BRUSQUE", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "ELAINE FAVERO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM CACADOR", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "ELEAKIN DE ALMEIDA SCREMIN", "Cargo Atual": "GERENTE DE GESTAO DE PESSOAS ", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM SAO JOSE", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "EMMANUELLE DE CARVALHO SANTIAGO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM SAO JOSE", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "FERNANDO RAMOS DAMASCO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM LAGES", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "GLAUBER EIJI QUERCIA HIROSE", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "GUILHERME ALLYSSON CARNEIRO PINHEIRO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "GABINETE DO PERITO-GERAL", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "GUSTAVO TEODORAK DAMIANI", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM CRICIUMA", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "IVAN LUIZ BENTO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM BLUMENAU", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "JEAN PIERRE SARDA VARGAS", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM BALNEARIO CAMBORIU", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "JOAO ROBERTO ARAUJO ANDRADE", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM BALNEARIO CAMBORIU", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "LAIS NUNES", "Cargo Atual": "PAPILOSCOPISTA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "LARISSA COSTA JORGE", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "CORREGEDORIA-GERAL", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "LEANDRO QUINTELA WOITYNA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM BRUSQUE", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "LEDIO SAVI MONDO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM LAGES", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "LUCAS HENRIQUE CAMBRUSSI DE LIMA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA DE FRONTEIRA EM XANXERE", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "LUIZ ANTONIO SIMM VIANA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA DE FRONTEIRA EM SAO LOURENCO DO OESTE", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "LUIZ ERNANDES WESCHE", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM SAO BENTO DO SUL", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "MARLON RIBEIRO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM CACADOR", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "MICHELLY ALVES PEREIRA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM FLORIANOPOLIS", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "MIRIANA BORGHEZAN GONCALVES", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM CRICIUMA", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "NADJARA DAS NEVES PIRES", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM SAO JOSE", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "NAYARA JULIO ROCHA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM LAGES", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "PAULO ROBERTO GAUDENCIO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM JARAGUA DO SUL", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "RAFAEL APARECIDO VIANA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM BRUSQUE", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "RAFAEL SILVA MARTINS", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM SAO JOSE", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "ROBSON ARCENIO FARIA", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "GERENCIA DE GESTAO DE PESSOAS", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "RONI COELHO ROSSO", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM ARARANGUA", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "THIAGO JOSE GASNHAR", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM PORTO UNIAO", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "WILLIAN FELIPE SANTIN", "Cargo Atual": "AGENTE DE POLICIA CIENTIFICA", "Lotacao (Unidade Exercicio)": "ACADEMIA DE PERICIA", "Cargo Concurso": "Perito Oficial Criminal - Ciências Sociais Aplicadas", "Arquivo PDF Origem": "ed_1_lst_homologacao_7_30.pdf"}, {"Nome": "DOUGLAS MAURICIO SPIES", "Cargo Atual": "PERITO OFICIAL CRIMINAL", "Lotacao (Unidade Exercicio)": "NUCLEO REGIONAL DE POLICIA CIENTIFICA EM JARAGUA DO SUL", "Cargo Concurso": "Perito Oficial Criminal - Medicina Legal", "Arquivo PDF Origem": "ed_1_lst_homologacao_1_13.pdf"}, {"Nome": "ARTHUR BONETTI MENDES", "Cargo Atual": "PERITO OFICIAL CRIMINAL", "Lotacao (Unidade Exercicio)": "SUPERINTENDENCIA REGIONAL DE POLICIA CIENTIFICA EM JOINVILLE", "Cargo Concurso": "Perito Oficial Criminal - Medicina Legal (Psiquiatria)", "Arquivo PDF Origem": "ed_1_lst_homologacao_2_12.pdf"}];
+    
+    // SVG icon for external link
+    const linkIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="external-link-icon"><path d="M14 3h7v7h-2V6.41L9.41 16 8 14.59 17.59 5H14V3zm-2 9v2H6V6h2v2h2v2H8v4h6v-2h-2zm6 8V12h2v10H2V8h10v2H4v10h16z"/></svg>`;
+
+    const tableBody = document.getElementById('tableBody');
+    const shownCountEl = document.getElementById('shownCount');
+    const totalCountEl = document.getElementById('totalCount');
+    const noResultsEl = document.getElementById('noResults');
+    const tableEl = document.getElementById('dataTable');
+
+    // Input elements
+    const inputs = {
+        nome: document.getElementById('searchNome'),
+        cargoAtual: document.getElementById('searchCargoAtual'),
+        lotacao: document.getElementById('searchLotacao'),
+        cargoConcurso: document.getElementById('searchCargoConcurso'),
+        arquivo: document.getElementById('searchArquivo')
+    };
+
+    function renderTable(filteredData) {
+        tableBody.innerHTML = '';
+        
+        if (filteredData.length === 0) {
+            noResultsEl.style.display = 'block';
+            tableEl.style.display = 'none';
+        } else {
+            noResultsEl.style.display = 'none';
+            tableEl.style.display = 'table';
+            
+            filteredData.forEach(row => {
+                const tr = document.createElement('tr');
+                const arquivo = row['Arquivo PDF Origem'] || '';
+                // Create link if archive exists
+                const arquivoLink = arquivo ? `<a href="${arquivo}" target="_blank">${arquivo}${linkIcon}</a>` : '';
+
+                tr.innerHTML = `
+                    <td>${row['Nome'] || ''}</td>
+                    <td>${row['Cargo Atual'] || ''}</td>
+                    <td>${row['Lotacao (Unidade Exercicio)'] || ''}</td>
+                    <td>${row['Cargo Concurso'] || ''}</td>
+                    <td>${arquivoLink}</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+        
+        shownCountEl.textContent = filteredData.length;
+        totalCountEl.textContent = data.length;
+    }
+
+    function filterData() {
+        const terms = {
+            nome: inputs.nome.value.toLowerCase(),
+            cargoAtual: inputs.cargoAtual.value.toLowerCase(),
+            lotacao: inputs.lotacao.value.toLowerCase(),
+            cargoConcurso: inputs.cargoConcurso.value.toLowerCase(),
+            arquivo: inputs.arquivo.value.toLowerCase()
+        };
+
+        const filtered = data.filter(item => {
+            return (
+                (item['Nome'] || '').toLowerCase().includes(terms.nome) &&
+                (item['Cargo Atual'] || '').toLowerCase().includes(terms.cargoAtual) &&
+                (item['Lotacao (Unidade Exercicio)'] || '').toLowerCase().includes(terms.lotacao) &&
+                (item['Cargo Concurso'] || '').toLowerCase().includes(terms.cargoConcurso) &&
+                (item['Arquivo PDF Origem'] || '').toLowerCase().includes(terms.arquivo)
+            );
+        });
+
+        renderTable(filtered);
+    }
+
+    // Attach event listeners
+    Object.values(inputs).forEach(input => {
+        input.addEventListener('input', filterData);
+    });
+    
+    // Sort functionality
+    let currentSort = { column: null, direction: 'asc' };
+    
+    window.sortTable = function(columnIndex) {
+        const mapIndexToKey = {
+            0: 'Nome',
+            1: 'Cargo Atual',
+            2: 'Lotacao (Unidade Exercicio)',
+            3: 'Cargo Concurso',
+            4: 'Arquivo PDF Origem'
+        };
+        
+        const key = mapIndexToKey[columnIndex];
+        
+        if (currentSort.column === key) {
+            currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+        } else {
+            currentSort.column = key;
+            currentSort.direction = 'asc';
+        }
+        
+        // Visual indicator logic could be added here (updating arrows)
+        
+        // Initial filter to get current set
+        const terms = {
+            nome: inputs.nome.value.toLowerCase(),
+            cargoAtual: inputs.cargoAtual.value.toLowerCase(),
+            lotacao: inputs.lotacao.value.toLowerCase(),
+            cargoConcurso: inputs.cargoConcurso.value.toLowerCase(),
+            arquivo: inputs.arquivo.value.toLowerCase()
+        };
+        
+        let filtered = data.filter(item => {
+            return (
+                (item['Nome'] || '').toLowerCase().includes(terms.nome) &&
+                (item['Cargo Atual'] || '').toLowerCase().includes(terms.cargoAtual) &&
+                (item['Lotacao (Unidade Exercicio)'] || '').toLowerCase().includes(terms.lotacao) &&
+                (item['Cargo Concurso'] || '').toLowerCase().includes(terms.cargoConcurso) &&
+                (item['Arquivo PDF Origem'] || '').toLowerCase().includes(terms.arquivo)
+            );
+        });
+        
+        filtered.sort((a, b) => {
+            const valA = (a[key] || '').toLowerCase();
+            const valB = (b[key] || '').toLowerCase();
+            
+            if (valA < valB) return currentSort.direction === 'asc' ? -1 : 1;
+            if (valA > valB) return currentSort.direction === 'asc' ? 1 : -1;
+            return 0;
+        });
+        
+        renderTable(filtered);
+    };
+
+    // Initial render
+    renderTable(data);
+
+</script>
+
+</body>
+</html>
