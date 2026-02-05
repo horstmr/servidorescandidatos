@@ -198,6 +198,11 @@ STOP_WORDS = set([
     "AUDITOR", "FISCAL", "ADMINISTRATIVO", "ANALISTA"
 ])
 
+# Palavras que indicam sufixos de nome (se aparecerem depois do nome, invalidam o match)
+NAME_SUFFIXES = set([
+    "JUNIOR", "JUN", "FILHO", "NETO", "SOBRINHO", "BISNETO"
+])
+
 def check_match_strict(name, text):
     """Verifica se o nome COMPLETO está presente no texto.
     Não aceita matches parciais (ex: "LUCAS ALVES" não deve dar match com "LUCAS ALVES GAMA SOUZA")"""
@@ -257,7 +262,12 @@ def check_match_strict(name, text):
         if clean_word in cidades:
             return True
         
-        # IMPORTANTE: Se a próxima palavra é alfabética e não é stop word nem cidade,
+        # Se é um sufixo de nome (JUNIOR, FILHO, etc), significa que há mais nome
+        # e o nome encontrado é apenas parte de um nome maior - NÃO aceitamos o match
+        if clean_word in NAME_SUFFIXES:
+            continue  # Rejeita o match
+        
+        # IMPORTANTE: Se a próxima palavra é alfabética e não é stop word nem cidade nem sufixo,
         # significa que o nome encontrado é apenas parte de um nome maior
         # Exemplo: encontramos "LUCAS ALVES" mas depois vem "GAMA", então não é match completo
         # Neste caso, NÃO aceitamos o match
