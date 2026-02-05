@@ -69,6 +69,48 @@ def extract_cargo_name(text):
             return line.split("Cargo:", 1)[1].strip()
     return "Cargo Desconhecido"
 
+STOP_WORDS = set([
+    "PERITO", "OFICIAL", "CRIMINAL", "MEDICINA", "LEGAL", "ODONTO", 
+    "AUXILIAR", "TECNICO", "FORENSE", "QUIMICA", "ENGENHARIA", 
+    "AGENTE", "POLICIA", "DELEGADO", "ESCRIVAO", "INVESTIGADOR", 
+    "NOTA", "TOTAL", "CLASSIFICACAO", "FINAL", "OBJETIVA", 
+    "TITULOS", "DISCURSIVA", "RESULTADO", "APROVADO", "ELIMINADO",
+    "INSCRICAO", "DATA", "NASCIMENTO", "JURADO", "NEGRO", "PCD",
+    "GERAL", "AMBIENTAL", "MECANICA", "ELETRICA", "INFORMATICA", "CONTABIL",
+    "AUDITOR", "FISCAL", "ADMINISTRATIVO", "ANALISTA"
+])
+
+def check_match_strict(name, text):
+    if len(name) < 5: return False
+    
+    # Regex for word boundary
+    pattern = r'\b' + re.escape(name) + r'\b'
+    
+    for match in re.finditer(pattern, text):
+        end = match.end()
+        if end >= len(text): return True
+        
+        remaining = text[end:]
+        if remaining.startswith('\n'): return True
+        
+        # Find next word
+        next_word_match = re.search(r'\S+', remaining)
+        if not next_word_match: return True
+            
+        next_word = next_word_match.group(0)
+        
+        # If starts with digit or symbol, valid
+        if not next_word[0].isalpha(): return True
+        
+        # If stop word, valid
+        clean_word = next_word.strip('.,-:/').upper()
+        if clean_word in STOP_WORDS: return True
+        
+        # Otherwise, implies longer name (e.g. "SILVA" in "SILVA JUNIOR")
+        continue
+
+    return False
+
 def main():
     servidores = load_servidores(csv_path)
     matches = [] 
@@ -86,9 +128,8 @@ def main():
         
         count_in_pdf = 0
         for serv in servidores:
-            # Strict match might be safer for simpler names, but these names seem full.
-            # Using simple substring inclusion.
-            if serv['name_norm'] in norm_text:
+            # Using strict match
+            if check_match_strict(serv['name_norm'], norm_text):
                 matches.append({
                     'Nome': serv['original_row'][0],
                     'CargoAtual': serv['original_row'][2] if len(serv['original_row']) > 2 else 'N/A',
