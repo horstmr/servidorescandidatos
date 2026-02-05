@@ -246,30 +246,46 @@ def main():
         servidores_por_nome[name_norm].append(serv)
     
     # Verificar se todos os nomes em cada grupo correspondem completamente
+    # Quando um nome aparece em múltiplos arquivos, só consideramos a mesma pessoa
+    # se todos os nomes normalizados corresponderem exatamente
     servidores_validos = []
+    nomes_rejeitados = 0
     for name_norm, grupo in servidores_por_nome.items():
         # Se há apenas um servidor com esse nome normalizado, adiciona diretamente
         if len(grupo) == 1:
             servidores_validos.extend(grupo)
         else:
-            # Se há múltiplos, verifica se todos os nomes originais normalizados correspondem
+            # Se há múltiplos servidores com o mesmo nome normalizado (de diferentes arquivos),
+            # verifica se todos os nomes originais normalizados correspondem exatamente
             nomes_originais_norm = [normalize(serv['Nome']) for serv in grupo]
             # Verifica se todos os nomes normalizados são idênticos
             if all(nome == name_norm for nome in nomes_originais_norm):
                 # Todos correspondem completamente, adiciona todos
                 servidores_validos.extend(grupo)
             else:
-                # Não correspondem completamente, não adiciona nenhum
-                print(f"  > Nomes não correspondem completamente para '{name_norm}': {[serv['Nome'] for serv in grupo]}")
+                # Não correspondem completamente - pode haver diferenças além de acentuação
+                # (ex: "José Silva" vs "José da Silva" normalizam para valores diferentes)
+                # Neste caso, não adicionamos nenhum para evitar falsos positivos
+                nomes_rejeitados += len(grupo)
+                if nomes_rejeitados <= 10:  # Limita prints para não poluir o output
+                    print(f"  > Nomes não correspondem completamente para '{name_norm}': {[serv['Nome'] for serv in grupo[:3]]}")
     
     print(f"Total valid servers after exact name matching: {len(servidores_validos)}")
+    if nomes_rejeitados > 0:
+        print(f"Servidores rejeitados (nomes não correspondem completamente): {nomes_rejeitados}")
 
     pdf_files = [f for f in os.listdir(BASE_DIR) if f.lower().endswith('.pdf')]
     print(f"Found {len(pdf_files)} PDFs.")
+    print(f"Processing PDFs...")
 
     matches = []
+    pdf_count = 0
 
     for filename in pdf_files:
+        pdf_count += 1
+        if pdf_count % 5 == 0:
+            print(f"  Processed {pdf_count}/{len(pdf_files)} PDFs... Found {len(matches)} matches so far.")
+        
         filepath = os.path.join(BASE_DIR, filename)
         raw_text = extract_text_from_pdf(filepath)
         norm_text = normalize(raw_text)
