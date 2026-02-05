@@ -81,34 +81,70 @@ STOP_WORDS = set([
 ])
 
 def check_match_strict(name, text):
+    """Verifica se o nome COMPLETO está presente no texto.
+    Não aceita matches parciais (ex: "LUCAS ALVES" não deve dar match com "LUCAS ALVES GAMA SOUZA")"""
     if len(name) < 5: return False
     
-    # Regex for word boundary
+    # Busca simples primeiro - mais rápida
+    if name not in text:
+        return False
+    
+    # Divide o nome em palavras
+    name_words = name.split()
+    if len(name_words) < 2:
+        return False  # Nome muito curto, não confiável
+    
+    # Procura o nome completo no texto com word boundaries
+    # Usa regex para garantir que encontramos o nome completo, não uma parte dele
     pattern = r'\b' + re.escape(name) + r'\b'
     
     for match in re.finditer(pattern, text):
+        start = match.start()
         end = match.end()
-        if end >= len(text): return True
+        
+        # Verifica o que vem antes - deve ser início de linha, espaço ou quebra de linha
+        if start > 0:
+            char_before = text[start - 1]
+            if char_before.isalnum():
+                continue  # Parte de outra palavra
+        
+        # Verifica o que vem depois - deve indicar fim do nome
+        if end >= len(text):
+            return True  # Fim do texto, nome completo encontrado
         
         remaining = text[end:]
-        if remaining.startswith('\n'): return True
         
-        # Find next word
-        next_word_match = re.search(r'\S+', remaining)
-        if not next_word_match: return True
-            
-        next_word = next_word_match.group(0)
+        # Se é fim de linha ou quebra de linha, é válido
+        if remaining.startswith('\n') or not remaining.strip():
+            return True
         
-        # If starts with digit or symbol, valid
-        if not next_word[0].isalpha(): return True
+        # Procura próxima palavra após o nome
+        next_match = re.search(r'\S+', remaining)
+        if not next_match:
+            return True
         
-        # If stop word, valid
+        next_word = next_match.group(0)
+        
+        # Se começa com número ou símbolo, é válido (fim de nome, início de outro campo)
+        if not next_word[0].isalpha():
+            return True
+        
+        # Se é uma stop word, é válido (fim de nome)
         clean_word = next_word.strip('.,-:/').upper()
-        if clean_word in STOP_WORDS: return True
+        if clean_word in STOP_WORDS:
+            return True
         
-        # Otherwise, implies longer name (e.g. "SILVA" in "SILVA JUNIOR")
+        # Se é uma cidade conhecida, é válido (fim de nome)
+        cidades = ['FLORIANOPOLIS', 'JOINVILLE', 'BLUMENAU', 'CRICIUMA', 'LAGES', 'PALHOCA', 'CHAPECO']
+        if clean_word in cidades:
+            return True
+        
+        # IMPORTANTE: Se a próxima palavra é alfabética e não é stop word nem cidade,
+        # significa que o nome encontrado é apenas parte de um nome maior
+        # Exemplo: encontramos "LUCAS ALVES" mas depois vem "GAMA", então não é match completo
+        # Neste caso, NÃO aceitamos o match
         continue
-
+    
     return False
 
 def main():

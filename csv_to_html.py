@@ -4,6 +4,7 @@ import os
 
 csv_path = r'd:\Google Drive\Meu Drive\ACAPE\CONCURSO 2026\fepese_pci_perito_pdfs\servidores_concurso_encontrados_detalhado.csv'
 html_path = r'd:\Google Drive\Meu Drive\ACAPE\CONCURSO 2026\fepese_pci_perito_pdfs\servidores_concurso_filter.html'
+index_html_path = r'd:\Google Drive\Meu Drive\ACAPE\CONCURSO 2026\fepese_pci_perito_pdfs\index.html'
 
 data = []
 try:
@@ -455,3 +456,9 @@ with open(html_path, 'w', encoding='utf-8') as f:
     f.write(html_content)
 
 print(f"HTML file created at: {html_path}")
+
+# Também salvar como index.html
+with open(index_html_path, 'w', encoding='utf-8') as f:
+    f.write(html_content)
+
+print(f"HTML file also created at: {index_html_path}")
