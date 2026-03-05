@@ -255,6 +255,10 @@
             <label for="searchArquivo">Arquivo Origem</label>
             <input type="text" id="searchArquivo" placeholder="Filtrar por arquivo...">
         </div>
+        <div class="filter-group">
+            <label for="searchClassif">Class. Prova Escrita</label>
+            <input type="text" id="searchClassif" placeholder="Filtrar por classificação...">
+        </div>
     </div>
 
     <div class="table-container">
@@ -343,7 +347,8 @@
             cargoAtual: inputs.cargoAtual.value.toLowerCase(),
             lotacao: inputs.lotacao.value.toLowerCase(),
             cargoConcurso: inputs.cargoConcurso.value.toLowerCase(),
-            arquivo: inputs.arquivo.value.toLowerCase()
+            arquivo: inputs.arquivo.value.toLowerCase(),
+            classif: inputs.classif.value.toLowerCase()
         };
 
         const filtered = data.filter(item => {
@@ -374,7 +379,8 @@
             1: 'Cargo Atual',
             2: 'Lotacao (Unidade Exercicio)',
             3: 'Cargo Concurso',
-            4: 'Arquivo PDF Origem'
+            4: 'Arquivo PDF Origem',
+            5: 'Classif. Prova Escrita'
         };
         
         const key = mapIndexToKey[columnIndex];
@@ -394,7 +400,8 @@
             cargoAtual: inputs.cargoAtual.value.toLowerCase(),
             lotacao: inputs.lotacao.value.toLowerCase(),
             cargoConcurso: inputs.cargoConcurso.value.toLowerCase(),
-            arquivo: inputs.arquivo.value.toLowerCase()
+            arquivo: inputs.arquivo.value.toLowerCase(),
+            classif: inputs.classif.value.toLowerCase()
         };
         
         let filtered = data.filter(item => {
