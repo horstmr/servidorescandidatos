@@ -415,10 +415,27 @@
             );
         });
         
+        const numericColumns = ['Classif. Prova Escrita'];
+        const isNumeric = numericColumns.includes(key);
+
         filtered.sort((a, b) => {
-            const valA = (a[key] || '').toLowerCase();
-            const valB = (b[key] || '').toLowerCase();
-            
+            const rawA = a[key] || '';
+            const rawB = b[key] || '';
+
+            if (isNumeric) {
+                const numA = parseInt(rawA, 10);
+                const numB = parseInt(rawB, 10);
+                const aIsNum = !isNaN(numA);
+                const bIsNum = !isNaN(numB);
+                // Itens sem número (—) vão para o final
+                if (!aIsNum && !bIsNum) return 0;
+                if (!aIsNum) return 1;
+                if (!bIsNum) return -1;
+                return currentSort.direction === 'asc' ? numA - numB : numB - numA;
+            }
+
+            const valA = rawA.toLowerCase();
+            const valB = rawB.toLowerCase();
             if (valA < valB) return currentSort.direction === 'asc' ? -1 : 1;
             if (valA > valB) return currentSort.direction === 'asc' ? 1 : -1;
             return 0;
