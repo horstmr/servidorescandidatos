@@ -2,9 +2,10 @@ import csv
 import json
 import os
 
-csv_path = r'd:\Google Drive\Meu Drive\ACAPE\CONCURSO 2026\fepese_pci_perito_pdfs\servidores_concurso_encontrados_detalhado.csv'
-html_path = r'd:\Google Drive\Meu Drive\ACAPE\CONCURSO 2026\fepese_pci_perito_pdfs\servidores_concurso_filter.html'
-index_html_path = r'd:\Google Drive\Meu Drive\ACAPE\CONCURSO 2026\fepese_pci_perito_pdfs\index.html'
+_script_dir = os.path.dirname(os.path.abspath(__file__))
+csv_path = os.path.join(_script_dir, 'servidores_concurso_encontrados_detalhado.csv')
+html_path = os.path.join(_script_dir, 'servidores_concurso_filter.html')
+index_html_path = os.path.join(_script_dir, 'index.html')
 
 data = []
 try:
