@@ -41,6 +41,7 @@ CLASSIFICACOES = {
     "ALLAN MARTINS ALVES": "628",
     "SERENA RAMOS": "813",
     # Ciências Biológicas
+    "CAMILLA DA ROSA DUARTE": "9",  # = Camilla da Rosa Duarte Fritsch (homologação)
     "SABRINA PEREIRA SANTOS": "1",
     "NATALIA VIEIRA SEGATTO": "3",
     "NICOLAS GABRIEL MARTINS SILVA": "11",
